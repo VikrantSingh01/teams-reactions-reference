@@ -2590,46 +2590,7 @@ For reactions where `diverse: true`, append the skin tone suffix to the base ID:
 - Base: `1f44b_wavinghand`
 - With tone: `1f44b_wavinghand-tone1`, `1f44b_wavinghand-tone2`, etc.
 
-### REST API Endpoints
-
-#### Get Message Reactions (Microsoft Graph)
-
-```http
-GET /teams/{team-id}/channels/{channel-id}/messages/{message-id}/reactions
-```
-
-#### Add Reaction (Microsoft Graph)
-
-```http
-POST /teams/{team-id}/channels/{channel-id}/messages/{message-id}/reactions
-Content-Type: application/json
-
-{
-  "reactionType": "1f44d_thumbsup"
-}
-```
-
-#### Remove Reaction (Microsoft Graph)
-
-```http
-DELETE /teams/{team-id}/channels/{channel-id}/messages/{message-id}/reactions/{reaction-id}
-```
-
----
-
----
-
-The interactive web tool supports keyboard shortcuts for faster navigation:
-
-| Shortcut | Action |
-|----------|--------|
-| `/` | Focus search input |
-| `Ctrl+K` / `Cmd+K` | Focus search input (alternative) |
-| `D` | Toggle Diverse Only filter |
-| `Esc` | Clear all filters or close dialog |
-| `?` | Show keyboard shortcuts dialog |
-
----
+<br>
 
 ## Best Practices
 

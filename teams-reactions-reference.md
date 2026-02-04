@@ -2415,18 +2415,55 @@ Unique Microsoft Teams-branded reactions and special text-based reactions.
 
 ### Basic Reaction Usage
 
+#### [TypeScript](#tab)
+
 ```typescript
-// Simple reaction in a bot
-await context.sendActivity({
-  type: 'messageReaction',
-  reactionsAdded: [{
-    type: 'like',
-    reaction: {
-      reactionType: '1f44d_thumbsup'
-    }
-  }]
+app.on('mention', async ({ activity, send }) => {
+  await send(new MessageReactionActivity({
+    replyToId = activity.id,
+    reactions: [like]
+  }));
 });
 ```
+
+#### [C#](#tab)
+
+```csharp
+[Message]
+public async Task OnMessage([Context] MessageActivity activity, [Context] IContext.Client client)
+{
+    if (activity.IsRecipientMentioned)
+    {
+        await client.Send(new MessageReactionActivity().AddReaction(new Reaction()
+        {
+            Type = "like"
+        }).WithReplyToId(activity.Id));
+    }
+}
+```
+
+#### [Python](#tab)
+
+
+```python
+@app.on_message
+async def handle_message(ctx: ActivityContext[MessageActivity]):
+    if ctx.activity.is_recipient_mentioned:
+        await ctx.send(MessageReactionActivityInput(reply_to_id=ctx.activity.id).add_reaction(MemssageReaction(type="like")))
+```
+
+#### [HTTP](#tab)
+
+```rest
+PUT {cloud}/{tenantId}/v3/conversations/{conversationId}/activities/{activityId}/reaction/{reactionType}
+```
+
+Where:
+- `conversationId` is the thread or chat identifier.
+- `activityId` is the message or activity ID.
+- `reactionId` is the `EmojiID` that you want to add.
+
+---
 
 ### Reaction with Skin Tone
 
@@ -2434,26 +2471,11 @@ await context.sendActivity({
 // Using a reaction with a specific skin tone
 const reactionId = "1f44b_wavinghand-tone3"; // Medium tone waving hand
 
-await context.sendActivity({
-  type: 'messageReaction',
-  reactionsAdded: [{
-    type: 'like',
-    reaction: {
-      reactionType: reactionId
-    }
-  }]
-});
-```
-
-```typescript
-// Sending multiple reactions at once
-await context.sendActivity({
-  type: 'messageReaction',
-  reactionsAdded: [
-    { type: 'like', reaction: { reactionType: '1f389_partypopper' } },
-    { type: 'like', reaction: { reactionType: '1f3c6_trophy' } },
-    { type: 'like', reaction: { reactionType: '1f44f_clappinghands' } }
-  ]
+app.on('mention', async ({ activity, send }) => {
+  await send(new MessageReactionActivity({
+    replyToId = activity.id,
+    reactions: [reactionId]
+  }));
 });
 ```
 
@@ -2461,15 +2483,13 @@ await context.sendActivity({
 
 ```typescript
 // Bot listening for reactions
-bot.onTurn(async (context) => {
-  if (context.activity.type === 'messageReaction') {
-    const reactionsAdded = context.activity.reactionsAdded;
-    
-    if (reactionsAdded && reactionsAdded.length > 0) {
-      reactionsAdded.forEach(reaction => {
-        console.log(`Reaction added: ${reaction.type}`);
-      });
-    }
+app.on('messageReaction', async ({ activity }) => {
+  const reactionsAdded = activity.reactionsAdded;
+  
+  if (reactionsAdded && reactionsAdded.length > 0) {
+    reactionsAdded.forEach(reaction => {
+      console.log(`Reaction added: ${reaction.type}`);
+    });
   }
 });
 ```
